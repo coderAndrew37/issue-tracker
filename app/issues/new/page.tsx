@@ -1,5 +1,6 @@
 "use client";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 import { createIssueSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextField } from "@radix-ui/themes";
@@ -15,12 +16,15 @@ type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setSubmitting] = useState(false);
   const router = useRouter();
   const onSubmit = async (data: IssueForm) => {
     try {
+      setSubmitting(true);
       await axios.post("/api/issues", data);
       router.push("/issues");
     } catch {
+      setSubmitting(false);
       console.error("Error creating issue:", error);
       setError("Failed to create issue");
     }
@@ -39,7 +43,7 @@ const NewIssuePage = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
@@ -64,8 +68,8 @@ const NewIssuePage = () => {
           <ErrorMessage error={errors.description.message} />
         )}
 
-        <Button type="submit" disabled={!isValid}>
-          Submit New Issue
+        <Button type="submit" disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
         </Button>
       </form>
     </>
