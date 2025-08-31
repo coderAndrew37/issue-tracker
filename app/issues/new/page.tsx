@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createIssueSchema } from "@/app/validationSchemas";
+import { z } from "zod";
 
-interface IssueForm {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState<string | null>(null);
@@ -35,11 +35,17 @@ const NewIssuePage = () => {
     }
   }, [error]);
 
-  const { register, handleSubmit, control } = useForm<IssueForm>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isValid },
+  } = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema),
+  });
 
   return (
-    <form className=" max-w-xl space-y-3" onSubmit={handleSubmit(onSubmit)}>
-      <TextField.Root placeholder="Title" {...register("title")} />
+    <>
       {error && (
         <Callout.Root color="red">
           <Callout.Icon>
@@ -51,16 +57,46 @@ const NewIssuePage = () => {
           </Callout.Text>
         </Callout.Root>
       )}
-      <Controller
-        name="description"
-        control={control}
-        render={({ field }) => (
-          <SimpleMDE {...field} placeholder="Description" />
-        )}
-      />
+      <form className=" max-w-xl space-y-3" onSubmit={handleSubmit(onSubmit)}>
+        <TextField.Root placeholder="Title" {...register("title")} />
 
-      <Button className="cursor-pointer">Submit New Issue</Button>
-    </form>
+        {errors.title && (
+          <Callout.Root color="red">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              <b>Error</b>
+              <div>{errors.title.message}</div>
+            </Callout.Text>
+          </Callout.Root>
+        )}
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <SimpleMDE {...field} placeholder="Description" />
+          )}
+        />
+
+        {errors.description && (
+          <Callout.Root color="red">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              <b>Error</b>
+              <div>{errors.description.message}</div>
+            </Callout.Text>
+          </Callout.Root>
+        )}
+
+        <Button type="submit" disabled={!isValid}>
+          Submit New Issue
+        </Button>
+      </form>
+    </>
   );
 };
 

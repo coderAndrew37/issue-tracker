@@ -1,25 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
 import { PrismaClient } from "@prisma/client";
+import { createIssueSchema } from "../../validationSchemas";
 const prisma = new PrismaClient();
-
-//validate data using zod
-const schema = z.object({
-  title: z
-    .string()
-    .min(2, { message: "Title must be at least 2 characters" })
-    .max(255, { message: "Title must be at most 255 characters" }),
-
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters" })
-    .max(1000, { message: "Description must be at most 1000 characters" }),
-});
 
 export async function POST(request: NextRequest) {
   const { title, description, status } = await request.json();
 
-  const result = schema.safeParse({ title, description, status });
+  const result = createIssueSchema.safeParse({ title, description, status });
 
   if (!result.success) {
     return NextResponse.json(
