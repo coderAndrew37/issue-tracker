@@ -32,9 +32,7 @@ export default function RootLayout({
       >
         <Theme>
           <NavBar />
-          <main className="flex min-h-screen flex-col items-center justify-center">
-            {children}
-          </main>
+          <main className="container mx-auto mt-10 px-4">{children}</main>
         </Theme>
       </body>
     </html>
