@@ -1,7 +1,7 @@
 import z from "@/node_modules/zod/v4/classic/external.cjs";
 
 //validate data using zod
-export const createIssueSchema = z.object({
+export const issueSchema = z.object({
   title: z
     .string()
     .min(2, { message: "Title must be at least 2 characters" })
