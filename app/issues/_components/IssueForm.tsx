@@ -34,6 +34,8 @@ const IssueForm = ({ issue }: Props) => {
       if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
       else await axios.post("/api/issues", data);
       router.push("/issues");
+      //refresh the page to show the new issue
+      router.refresh();
     } catch {
       setSubmitting(false);
       console.error("Error creating issue:", error);

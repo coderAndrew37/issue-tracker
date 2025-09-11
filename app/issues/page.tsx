@@ -45,4 +45,7 @@ const IssuesPage = async () => {
   );
 };
 
+//opt out of static rendering
+export const dynamic = "force-dynamic";
+
 export default IssuesPage;
