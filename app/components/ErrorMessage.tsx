@@ -1,3 +1,4 @@
+"use client";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout } from "@radix-ui/themes";
 import React, { useEffect, useState } from "react";

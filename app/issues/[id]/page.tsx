@@ -22,7 +22,11 @@ const IssueDetailsPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <Grid columns={{ initial: "1", md: "2" }} className="mb-4" gap="3">
+      <Grid
+        columns={{ initial: "1", md: "5" }}
+        className="mb-4"
+        gap="3 col-span-4"
+      >
         <Box>
           <Heading>{issue.title}</Heading>
           <Flex className="space-x-3 my-2 items-center">
@@ -34,8 +38,10 @@ const IssueDetailsPage = async ({ params }: Props) => {
           </Card>
         </Box>
         <Box>
-          <EditIssueButton issueId={issue.id} />
-          <DeleteIssueButton issueId={issue.id} />
+          <Flex direction={"column"} gap="3">
+            <EditIssueButton issueId={issue.id} />
+            <DeleteIssueButton issueId={issue.id} />
+          </Flex>
         </Box>
       </Grid>
     </div>
