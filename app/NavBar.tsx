@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Container, Flex, Text } from "@radix-ui/themes";
+import { Avatar, Container, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -44,25 +44,45 @@ const NavBar = () => {
           {/* Right section: User info / Login-Logout */}
           <Flex align="center" gap="3">
             {status === "authenticated" && sessionData?.user && (
-              <>
-                {sessionData.user.image && (
-                  <Avatar
-                    src={sessionData.user.image}
-                    fallback={sessionData.user.name?.[0] || "U"}
-                    size="2"
-                    radius="full"
-                  />
-                )}
-                <Text size="2" weight="medium" className="text-zinc-600">
-                  {sessionData.user.name ?? "Guest"}
-                </Text>
-                <Link
-                  href="/api/auth/signout"
-                  className="text-sm font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <button className="flex items-center gap-2 focus:outline-none">
+                    {sessionData.user.image && (
+                      <Avatar
+                        src={sessionData.user.image}
+                        fallback={sessionData.user.name?.[0] || "U"}
+                        size="2"
+                        radius="full"
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </button>
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content
+                  sideOffset={4}
+                  className="rounded-xl border bg-white shadow-md p-2"
                 >
-                  Logout
-                </Link>
-              </>
+                  <DropdownMenu.Item asChild>
+                    <Text size="2" weight="medium" className="text-zinc-600">
+                      {sessionData.user.name ?? "Guest"}
+                    </Text>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item asChild>
+                    <Text size="2" className="text-zinc-500">
+                      {sessionData.user.email}
+                    </Text>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item asChild>
+                    <Link
+                      href="/api/auth/signout"
+                      className="block text-sm font-semibold text-zinc-500 hover:text-zinc-900 transition-colors px-2 py-1 cursor-pointer"
+                    >
+                      Logout
+                    </Link>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             )}
 
             {status === "unauthenticated" && (
