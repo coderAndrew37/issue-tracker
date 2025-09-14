@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBug } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
 
 const NavBar = () => {
   return (
@@ -26,6 +27,9 @@ const AuthStatus = () => {
   const { status, data: sessionData } = useSession();
   return (
     <Flex align="center" gap="3">
+      {status === "loading" && <Skeleton width={80} height={20} />}
+
+      {/* Authenticated */}
       {status === "authenticated" && sessionData?.user && (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
