@@ -1,6 +1,6 @@
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
-import React from "react";
+import IssueStatusFilter from "./IssueStatusFilter";
 
 const IssueActions = () => {
   return (
@@ -8,6 +8,8 @@ const IssueActions = () => {
       <Button>
         <Link href="/issues/new">Create New Issue</Link>
       </Button>
+
+      <IssueStatusFilter />
     </div>
   );
 };

@@ -1,11 +1,11 @@
 "use client";
-import { User } from "@prisma/client";
+import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Skeleton from "../../components/Skeleton";
 
-const AssigneeSelect = () => {
+const AssigneeSelect = ({ issueId }: { issueId: Issue }) => {
   // Fetch users from the API using React Query
   const {
     data: users,
@@ -25,7 +25,11 @@ const AssigneeSelect = () => {
   if (isLoading) return <Skeleton />;
 
   return (
-    <Select.Root>
+    <Select.Root
+      onValueChange={async (userId) => {
+        await axios.patch(`/api/issues/${issueId}`, { assigneeId: userId });
+      }}
+    >
       <Select.Trigger placeholder="Select an assignee"></Select.Trigger>
       <Select.Content>
         <Select.Group>

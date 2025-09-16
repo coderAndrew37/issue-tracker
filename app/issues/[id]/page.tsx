@@ -1,13 +1,12 @@
+import authOptions from "@/app/auth/authOptions";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import prisma from "@/prisma/client";
 import { Box, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import DeleteIssueButton from "./DeleteIssueButton";
 import EditIssueButton from "./EditIssueButton";
-import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
-import AssigneeSelect from "./AssigneeSelect";
 //grab the id from the params
 interface Props {
   params: { id: string };
@@ -44,7 +43,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
         {session && (
           <Box>
             <Flex direction={"column"} gap="3">
-              <AssigneeSelect />
+              {/* <AssigneeSelect issueId={issue.id} /> */}
               <EditIssueButton issueId={issue.id} />
               <DeleteIssueButton issueId={issue.id} />
             </Flex>
